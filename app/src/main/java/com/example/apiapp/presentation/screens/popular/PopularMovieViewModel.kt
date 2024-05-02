@@ -4,7 +4,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.apiapp.domain.popluer.GetPopularMovieUseCase
+import com.example.apiapp.domain.popluer.GetPopularMoviesUseCase
 import com.example.apiapp.model.SearchResponse
 import com.example.apiapp.model.UIState
 import dagger.hilt.android.HiltAndroidApp
@@ -15,7 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PopularMovieViewModel @Inject constructor(
-    private val getPopularMovieUseCase: GetPopularMovieUseCase): ViewModel(){
+    private val getPopularMovieUseCase: GetPopularMoviesUseCase
+): ViewModel(){
 
     var popularMovieState: MutableState<UIState<SearchResponse>> = mutableStateOf(UIState.Loading())
 
