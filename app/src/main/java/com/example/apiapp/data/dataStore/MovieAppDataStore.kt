@@ -1,7 +1,6 @@
 package com.example.apiapp.data.dataStore
 
 import android.content.Context
-import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
@@ -12,7 +11,7 @@ import javax.inject.Inject
 
 
 const val PREFERENCES_NAME = "is_first_time"
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+val Context.dataStore: androidx.datastore.core.DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 class MovieAppDataStore @Inject constructor(context: Context) {
 

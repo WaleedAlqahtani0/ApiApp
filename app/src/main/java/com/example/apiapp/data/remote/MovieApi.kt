@@ -8,12 +8,12 @@ import retrofit2.http.Query
 
 interface MovieApi {
     @GET("3/movie/upcoming")
-    suspend fun  getUpcoming(
+    suspend fun getUpcoming(
         @Query("api_key")
-        apiKey: String= BuildConfig.TMDM_API_KEY,
+        apiKey: String = BuildConfig.TMDM_API_KEY,
         @Query("language")
-        language :String = "en-US",
+        language: String = "en-US",
         @Query("page")
-        page:Int = 1,
+        page: Int = 1,
     ): Response<SearchResponse>
 }

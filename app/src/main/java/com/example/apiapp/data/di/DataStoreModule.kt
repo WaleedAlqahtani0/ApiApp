@@ -13,10 +13,10 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object DataStoreModule {
+
     @Provides
     @Singleton
-    fun  provideDataStoreOperation(
+    fun provideDataStoreOperations(
         @ApplicationContext context: Context
-    )= MovieAppDataStore(context=context)
-
+    ) = MovieAppDataStore(context = context)
 }

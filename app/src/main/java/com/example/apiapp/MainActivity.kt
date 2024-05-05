@@ -3,32 +3,31 @@ package com.example.apiapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.MutableIntState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
-import com.example.apiapp.contest.MOVIE_IMAGE_BASE_URL
-import com.example.apiapp.model.BackdropSize
-import com.example.apiapp.model.SearchResponse
-import com.example.apiapp.model.UIState
-import com.example.apiapp.presentation.navigation.NavGraph
-import com.example.apiapp.presentation.screens.popular.PopularMovieViewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import com.example.apiapp.presentation.navigation.BottomNavigationItem
+import com.example.apiapp.presentation.navigation.MovieNavGraph
+import com.example.apiapp.presentation.navigation.Screens
+import com.example.apiapp.presentation.navigation.popUpToTop
 import com.example.apiapp.ui.theme.ApiAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -38,8 +37,64 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ApiAppTheme {
-                NavGraph()
+                val navController = rememberNavController()
+
+                var showBottomBar by rememberSaveable { mutableStateOf(true) }
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+
+                showBottomBar = when (navBackStackEntry?.destination?.route) {
+                    Screens.OnBoarding.route -> false // on this screen bottom bar should be hidden
+                    else -> true // in all other cases show bottom bar
+                }
+                val navigationSelectedItem = rememberSaveable {
+                    mutableIntStateOf(0)
+                }
+
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    bottomBar = {
+                        if (showBottomBar) {
+                            NavigationBar {
+                                BottomNavigationBar(navigationSelectedItem, navController)
+                            }
+                        }
+                    }
+                ) { paddingValues ->
+                    //We need to setup our NavHost in here
+                    Box(modifier = Modifier.padding(paddingValues)) {
+                        MovieNavGraph(navController)
+                    }
+                }
             }
         }
+    }
+
+    @Composable
+    private fun RowScope.BottomNavigationBar(
+        navigationSelectedItem: MutableIntState,
+        navController: NavHostController
+    ) {
+        BottomNavigationItem().bottomNavigationItems()
+            .forEachIndexed { index, navigationItem ->
+                //iterating all items with their respective indexes
+                NavigationBarItem(
+                    selected = index == navigationSelectedItem.intValue,
+                    label = {
+                        Text(navigationItem.label)
+                    },
+                    icon = {
+                        Icon(
+                            navigationItem.icon,
+                            contentDescription = navigationItem.label
+                        )
+                    },
+                    onClick = {
+                        navigationSelectedItem.intValue = index
+                        navController.navigate(navigationItem.route) {
+                            popUpToTop(navController)
+                        }
+                    }
+                )
+            }
     }
 }
