@@ -1,5 +1,6 @@
 package com.example.apiapp.presentation.screens.popular
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -25,6 +26,7 @@ import com.example.apiapp.R
 import com.example.apiapp.contest.MOVIE_IMAGE_BASE_URL
 import com.example.apiapp.model.BackdropSize
 import com.example.apiapp.model.Results
+import com.example.apiapp.presentation.navigation.Screens
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
@@ -43,10 +45,14 @@ fun PopularMoviesScreen(
             items(moviePagingItems.itemCount) { index ->
                 if(moviePagingItems[index]?.adult==false) {
                     AsyncImage(
+
                         model = "${MOVIE_IMAGE_BASE_URL}${BackdropSize.w300}/${moviePagingItems[index]?.posterPath}",
                         contentDescription = "",
                         modifier = Modifier
-                            .padding(2.dp),
+                            .padding(2.dp)
+                            .clickable{
+                                navController.navigate(Screens.MovieDetail.route + "/${moviePagingItems[index]?.id}")
+                            },
                         contentScale = ContentScale.FillWidth,
                         error = painterResource(R.drawable.no_poster),
                         placeholder = painterResource(R.drawable.no_poster)
