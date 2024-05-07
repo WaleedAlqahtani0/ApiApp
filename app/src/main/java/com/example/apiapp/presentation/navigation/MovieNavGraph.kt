@@ -17,6 +17,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.apiapp.presentation.screens.MovieDetailsScreen.MovieDetailViewModel
 import com.example.apiapp.presentation.screens.MovieDetailsScreen.MovieDetailsScreen
+import com.example.apiapp.presentation.screens.Search.SeacrhMoviesScreen
+import com.example.apiapp.presentation.screens.Search.SearchMoviesViewModel
 import com.example.apiapp.presentation.screens.onBording.OnBoardingScreen
 import com.example.apiapp.presentation.screens.onBording.OnBoardingViewModel
 import com.example.apiapp.presentation.screens.popular.PopularMoviesScreen
@@ -41,10 +43,9 @@ fun MovieNavGraph(
             PopularMoviesScreen(navController, viewModel.popularMoviesState)
         }
         composable(Screens.Search.route) {
-            Column(modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Gray)) {
-
+            val viewModel = hiltViewModel<SearchMoviesViewModel>()
+            SeacrhMoviesScreen( navController,viewModel.searchState){
+                viewModel.getSearchItem(it)
             }
         }
         composable(Screens.Profile.route) {

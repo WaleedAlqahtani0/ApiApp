@@ -12,4 +12,6 @@ class GetPopularMoviesUseCase @Inject constructor(private val popularMoviesRepos
     operator fun invoke(): Flow<PagingData<Results>> {
         return popularMoviesRepository.getPopularMovies()
     }
+
+
 }

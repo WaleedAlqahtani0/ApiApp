@@ -5,18 +5,26 @@ import androidx.paging.PagingState
 import com.example.apiapp.BuildConfig
 import com.example.apiapp.data.remote.MovieApi
 import com.example.apiapp.model.Results
+import retrofit2.http.Query
 import java.io.IOException
 
 class MoviePagingSource(
     private val movieApi: MovieApi,
+    private val isSearchEndPoint:Boolean,
+    private val searchQuery:String ?=null
 ) : PagingSource<Int, Results>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Results> {
         return try {
             val currentPage = params.key ?: 1
-            val movies = movieApi.getUpcoming(
-                apiKey = BuildConfig.TMDM_API_KEY,
-                page = currentPage
+            val movies = if(isSearchEndPoint)
+             movieApi.searchMovie(
+                 page = currentPage,
+                 query = searchQuery.orEmpty()
+            )else(
+                    movieApi.getUpcoming(
+                        page = currentPage,
+                    )
             )
             LoadResult.Page(
                 data = movies.body()?.results.orEmpty(),

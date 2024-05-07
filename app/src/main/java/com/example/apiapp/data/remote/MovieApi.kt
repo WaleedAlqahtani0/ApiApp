@@ -19,6 +19,8 @@ interface MovieApi {
         page: Int = 1,
     ): Response<SearchResponse>
 
+
+    //Single Movie
     @GET("3/movie/{movie_id}")
     suspend fun getMovieDetail(
         @Path("movie_id")
@@ -30,4 +32,20 @@ interface MovieApi {
         @Query("append_to_response")
         append_to_response: String?=""
     ): Response<MovieDetailsResponse>
+
+
+
+    @GET("3/search/multi")
+    suspend fun searchMovie(
+        @Query("query")
+        query: String,
+        @Query("api_key")
+        apiKey: String = BuildConfig.TMDM_API_KEY,
+        @Query("Language")
+        language: String = "en-US",
+        @Query("page")
+        page: Int = 1,
+
+        ): Response<SearchResponse>
+
 }
