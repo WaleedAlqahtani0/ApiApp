@@ -1,6 +1,7 @@
 package com.example.apiapp.model
 
 import androidx.core.app.NotificationCompat.MessagingStyle.Message
+import kotlinx.coroutines.flow.MutableStateFlow
 
 sealed class UIState<T : Any> {
     data class Loading<T : Any>(val nothing: Nothing? = null) : UIState<T>()

@@ -42,6 +42,9 @@ import com.example.apiapp.model.BackdropSize
 import com.example.apiapp.model.Results
 import com.example.apiapp.presentation.navigation.Screens
 import kotlinx.coroutines.flow.MutableStateFlow
+
+
+
  @Composable
  fun SeacrhMoviesScreen(
         navController: NavHostController,
@@ -61,7 +64,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
                      text = it
                      onSearch.invoke(text)
                  },
-                 leadingIcon = { Icon(Icons.Filled.Search, "icon") },
+                 leadingIcon = {
+                     Icon(Icons.Filled.Search, "icon") },
                  label = { Text(text = "Search") },
                  keyboardActions = KeyboardActions(
                      onSearch = {

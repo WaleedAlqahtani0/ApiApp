@@ -1,10 +1,15 @@
 package com.example.apiapp.data.remote
 
+import android.app.blob.BlobStoreManager.Session
+import coil.request.ImageRequest
 import com.example.apiapp.BuildConfig
 import com.example.apiapp.model.MovieDetailsResponse
 import com.example.apiapp.model.SearchResponse
+import com.example.apiapp.model.UserAccount
+import com.example.apiapp.model.UserTokenResponse
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -34,7 +39,7 @@ interface MovieApi {
     ): Response<MovieDetailsResponse>
 
 
-
+    //search
     @GET("3/search/multi")
     suspend fun searchMovie(
         @Query("query")
@@ -47,5 +52,31 @@ interface MovieApi {
         page: Int = 1,
 
         ): Response<SearchResponse>
+
+    //
+    @GET("3/authentication/token/new")
+    suspend fun getUserToken(
+        @Query("api_key")
+        apiKey: String = BuildConfig.TMDM_API_KEY,
+    ): Response<UserTokenResponse>
+
+
+    @POST("3/authentication/session/new")
+    suspend fun getSessionId(
+        @Query("api_key")
+        apiKey: String = BuildConfig.TMDM_API_KEY,
+        @Query("request_token")
+        requestToken: String
+    ): Response<UserTokenResponse>
+
+
+    @GET("3/account")
+    suspend fun getUserAccount(
+        @Query("api_key")
+        apiKey: String = BuildConfig.TMDM_API_KEY,
+        @Query("session_id")
+        sessionId:String
+    ): Response<UserAccount>
+
 
 }

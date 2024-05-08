@@ -17,6 +17,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.apiapp.presentation.screens.MovieDetailsScreen.MovieDetailViewModel
 import com.example.apiapp.presentation.screens.MovieDetailsScreen.MovieDetailsScreen
+import com.example.apiapp.presentation.screens.Profile.ProfileMoviesScreen
+import com.example.apiapp.presentation.screens.Profile.ProfileMoviesViewModel
 import com.example.apiapp.presentation.screens.Search.SeacrhMoviesScreen
 import com.example.apiapp.presentation.screens.Search.SearchMoviesViewModel
 import com.example.apiapp.presentation.screens.onBording.OnBoardingScreen
@@ -44,17 +46,15 @@ fun MovieNavGraph(
         }
         composable(Screens.Search.route) {
             val viewModel = hiltViewModel<SearchMoviesViewModel>()
-            SeacrhMoviesScreen( navController,viewModel.searchState){
+            SeacrhMoviesScreen( navController, viewModel.searchState){
                 viewModel.getSearchItem(it)
             }
         }
         composable(Screens.Profile.route) {
-            Column(modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Gray)) {
-
-            }
+            val viewModel = hiltViewModel<ProfileMoviesViewModel>()
+            ProfileMoviesScreen(viewModel,navController)
         }
+
         composable("${Screens.MovieDetail.route}/{id}", arguments = listOf(
             navArgument("id") {
                 type = NavType.IntType
