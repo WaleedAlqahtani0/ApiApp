@@ -5,6 +5,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import coil.request.ImageRequest
+import com.example.apiapp.data.dao.MovieDao
 import com.example.apiapp.data.paging.MoviePagingSource
 import com.example.apiapp.data.remote.MovieApi
 import com.example.apiapp.model.MovieDetailsResponse
@@ -18,7 +19,8 @@ import javax.inject.Singleton
 
 @Singleton
 class MoviesRepository @Inject constructor(
-    val movieApi: MovieApi
+    val movieApi: MovieApi,
+    private val movieDao: MovieDao,
 ) {
     suspend fun getMovieDetails(movieID: Int): UIState<MovieDetailsResponse> {
         try {
@@ -34,20 +36,29 @@ class MoviesRepository @Inject constructor(
 
     }
 
-    fun getPopularMovies(): Flow<PagingData<Results>> {
+    fun getUpComingMovies(): Flow<PagingData<Results>> {
         return Pager(
-            config = PagingConfig(pageSize = 15, prefetchDistance = 2),
+            config = PagingConfig(pageSize = 20, prefetchDistance = 20, enablePlaceholders = false),
             pagingSourceFactory = {
-                MoviePagingSource(movieApi,false)
+                MoviePagingSource(
+                    movieApi,
+                    false,
+                    movieDao = movieDao,
+                )
             }
         ).flow
     }
 
-    fun getSearchMovies(query:String): Flow<PagingData<Results>> {
+    fun searchInMovies(query: String): Flow<PagingData<Results>> {
         return Pager(
-            config = PagingConfig(pageSize = 15, prefetchDistance = 2),
+            config = PagingConfig(pageSize = 20, prefetchDistance = 20, enablePlaceholders = false),
             pagingSourceFactory = {
-                MoviePagingSource(movieApi,true,query)
+                MoviePagingSource(
+                    movieApi,
+                    true,
+                    query,
+                    movieDao = movieDao,
+                )
             }
         ).flow
     }
@@ -64,12 +75,11 @@ class MoviesRepository @Inject constructor(
         } catch (e: Exception) {
             return UIState.Error(e.message.toString())
         }
-
     }
 
-    suspend fun getSessionId(requestToken:String): UIState<UserTokenResponse> {
+    suspend fun getSessionId(requestToken: String): UIState<UserTokenResponse> {
         try {
-            val response = movieApi.getSessionId(requestToken=requestToken)
+            val response = movieApi.getSessionId(requestToken = requestToken)
             if (response.isSuccessful && response.body() != null) {
                 return UIState.Success(response.body())
             } else {
@@ -80,10 +90,9 @@ class MoviesRepository @Inject constructor(
         }
     }
 
-
-    suspend fun getUserAccount(sessionId:String): UIState<UserAccount> {
+    suspend fun getUserAccount(sessionId: String): UIState<UserAccount> {
         try {
-            val response = movieApi.getUserAccount(sessionId=sessionId)
+            val response = movieApi.getUserAccount(sessionId = sessionId)
             if (response.isSuccessful && response.body() != null) {
                 return UIState.Success(response.body())
             } else {
@@ -93,7 +102,5 @@ class MoviesRepository @Inject constructor(
             return UIState.Error(e.message.toString())
         }
     }
-
 
 }
-

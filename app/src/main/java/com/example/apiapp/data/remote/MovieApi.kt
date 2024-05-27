@@ -24,59 +24,51 @@ interface MovieApi {
         page: Int = 1,
     ): Response<SearchResponse>
 
-
-    //Single Movie
     @GET("3/movie/{movie_id}")
     suspend fun getMovieDetail(
         @Path("movie_id")
         movieId: Int,
         @Query("api_key")
-        api_key: String = BuildConfig.TMDM_API_KEY,
+        apiKey: String = BuildConfig.TMDM_API_KEY,
         @Query("language")
         language: String = "en-US",
         @Query("append_to_response")
         append_to_response: String?=""
     ): Response<MovieDetailsResponse>
 
-
-    //search
-    @GET("3/search/multi")
+    @GET("3/search/movie")
     suspend fun searchMovie(
+        @Query("api_key")
+        apiKey: String =  BuildConfig.TMDM_API_KEY,
+        @Query("language")
+        language: String = "en-US",
         @Query("query")
         query: String,
-        @Query("api_key")
-        apiKey: String = BuildConfig.TMDM_API_KEY,
-        @Query("Language")
-        language: String = "en-US",
         @Query("page")
-        page: Int = 1,
+        page: Int ,
+        @Query("include_adult")
+        includeAdult: Boolean = false
+    ): Response<SearchResponse>
 
-        ): Response<SearchResponse>
-
-    //
     @GET("3/authentication/token/new")
     suspend fun getUserToken(
         @Query("api_key")
-        apiKey: String = BuildConfig.TMDM_API_KEY,
+        apiKey: String =  BuildConfig.TMDM_API_KEY
     ): Response<UserTokenResponse>
-
 
     @POST("3/authentication/session/new")
     suspend fun getSessionId(
         @Query("api_key")
-        apiKey: String = BuildConfig.TMDM_API_KEY,
+        apiKey: String =  BuildConfig.TMDM_API_KEY,
         @Query("request_token")
-        requestToken: String
+        requestToken:String
     ): Response<UserTokenResponse>
-
 
     @GET("3/account")
     suspend fun getUserAccount(
         @Query("api_key")
-        apiKey: String = BuildConfig.TMDM_API_KEY,
+        apiKey: String =  BuildConfig.TMDM_API_KEY,
         @Query("session_id")
         sessionId:String
     ): Response<UserAccount>
-
-
 }

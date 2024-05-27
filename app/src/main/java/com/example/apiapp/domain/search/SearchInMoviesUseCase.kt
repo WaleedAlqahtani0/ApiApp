@@ -6,6 +6,6 @@ import javax.inject.Inject
 
 @Reusable
 class SearchInMoviesUseCase @Inject constructor(private val popularMoviesRepository: MoviesRepository) {
-    operator fun invoke(query: String)= popularMoviesRepository.getSearchMovies(query)
+    operator fun invoke(query: String)= popularMoviesRepository.searchInMovies(query)
 
 }
