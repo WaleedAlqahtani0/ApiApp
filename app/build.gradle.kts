@@ -116,6 +116,26 @@ dependencies {
     kapt("androidx.room:room-compiler:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
 
+    // JUnit
+    testImplementation("junit:junit:4.13.2")
+    // Coroutine test
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
+    // Google truth for assertion
+    testImplementation("com.google.truth:truth:1.1.3")
+
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.11.0")
+
+    testImplementation("io.mockk:mockk:1.10.5")
+    androidTestImplementation("androidx.navigation:navigation-testing:2.7.7")
+    // For instrumented tests.
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.48.1")
+    // ...with Kotlin.
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.28-alpha")
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
+
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
+
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
